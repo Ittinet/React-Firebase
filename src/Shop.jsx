@@ -1,7 +1,12 @@
+import { useState } from "react"
 
 const Shop = () => {
+
+
     return (
-        <div>Shop Page test</div>
+        <div>
+
+        </div>
     )
 }
 
