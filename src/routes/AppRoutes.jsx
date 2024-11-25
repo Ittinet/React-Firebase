@@ -31,29 +31,20 @@ import Register from '../../Register'
 import Home from '../Home'
 import Game from '../Page/Game'
 import Shop from '../Shop'
+import Navbar from '../component/Navbar'
+import Layout from '../component/Layout'
 
 
 const router = createBrowserRouter([
     {
         path: '/',
-        element: <Home />
-    },
-    {
-        path: '/login',
-        element: <Login />
-    },
-    {
-        path: '/Register',
-        element: <Register />
-    },
-    {
-        path: '/game',
-        element: <Game />
-    },
-    {
-        path: '/shop',
-        element: <Shop />
+        element: <Layout />,
+        children: [
+            { index: true, element: <Home /> },
+            { path: '/shop', element: <Shop /> }
+        ]
     }
+
 ], { basename: "/React-Firebase/" })
 
 

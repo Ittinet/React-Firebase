@@ -5,10 +5,7 @@ import SlideMain from "./component/SlideMain"
 const Home = () => {
     return (
         <div>
-            <div className="max-w-[1600px] m-auto">
-                <div>
-                    <Navbar />
-                </div>
+            <div className="max-w-full m-auto">
                 <div>
                     <SlideMain />
                 </div>

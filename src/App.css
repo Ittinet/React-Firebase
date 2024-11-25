@@ -40,6 +40,20 @@
   justify-items: center;
   background-color: #f6f5f7;
   position: relative;
+  z-index: 40;
+  animation-name: fadeIn;
+  animation-duration: 1s;
+  animation-fill-mode: forwards;
+  opacity: 0;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 .container .form {
@@ -212,4 +226,60 @@
 
 .onactionform-left {
   transform: translateX(0);
+}
+
+/* Popup-Login */
+.Popup-login {
+  position: fixed;
+  z-index: 20;
+  background-color: rgba(0, 0, 0, 0.384);
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.container-grid {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(220px, 1fr)
+  ); /* ยืดหดในแนวนอน */
+  grid-template-rows: auto; /* ให้แถวปรับตามเนื้อหา */
+  gap: 1rem; /* ระยะห่างระหว่างแต่ละคอลัมน์ */
+  padding: 1rem;
+}
+
+.test-shadow {
+  filter: drop-shadow(7px 10px 5px #999);
+}
+
+.container-grid-content1 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  grid-template-rows: auto; /* ให้แถวปรับตามเนื้อหา */
+
+  padding: 1rem;
+}
+
+.BannerSlide-1 {
+  background-image: url("./assets/img1/banner/parallax.jpg");
+  background-size: cover;
+  background-position: calc(50% + 0px) calc(50% - -0px);
+  width: 100%;
+  height: 80vh;
+}
+.BannerSlide-2 {
+  background-image: url("./assets/img1/banner/2.jpg");
+  background-size: cover;
+  background-position: calc(50% + 0px) calc(50% - -0px);
+  width: 100%;
+  height: 80vh;
+}
+.BannerSlide-3 {
+  background-image: url("./assets/img1/back.jpg");
+  background-size: cover;
+  background-position: calc(50% + 0px) calc(50% - -0px);
+  width: 100%;
+  height: 80vh;
 }

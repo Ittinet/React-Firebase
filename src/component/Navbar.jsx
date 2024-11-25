@@ -1,13 +1,28 @@
 import { Link } from 'react-router-dom';
 import { CircleUserRound, ShoppingCart, MoonStar } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import Gojo from '../assets/images/Gojo.png'
+import account from '../assets/images/account.png'
+import usefbStore from '../Store/store';
+import Login from '../Login';
 
 const Navbar = () => {
 
   // กำหนด state สำหรับเปิด/ปิดเมนู
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [darkMode, setdarkMode] = useState(false);
+  const [isPopupOpen, setisPopupOpen] = useState(false);
+
+  const init = usefbStore(state => state.init)
+  const user = usefbStore(state => state.user)
+  const stopListening = usefbStore(state => state.stopListening)
+  const logout = usefbStore(state => state.logout)
+
+  let popup = null
+  if (isPopupOpen) {
+    popup = <Login isClosePopup={() => { setisPopupOpen(false) }} />
+  } else {
+    popup = null
+  }
 
   useEffect(() => {
     if (darkMode) {
@@ -17,6 +32,21 @@ const Navbar = () => {
     }
   }, [darkMode])
 
+  useEffect(() => {
+    init()
+
+    return () => {
+      stopListening()
+    }
+  }, [init, stopListening])
+
+
+
+  const handdleLogout = async () => {
+    await logout()
+    console.log('Logut Complete')
+  }
+
   const toggleDarkMode = () => {
     setdarkMode(!darkMode);
   }
@@ -25,15 +55,16 @@ const Navbar = () => {
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
-  console.log(isMenuOpen)
+
+
   return (
-    <div className="bg-white items-center">
+    <div className="items-center relative">
 
 
 
-      <nav className="bg-white border-gray-200 dark:bg-gray-900 relative">
+      <nav className="bg-white border-gray-200 dark:bg-gray-900 relative shadow-lg">
         {/* Logo */}
-        <div className="max-w-full flex flex-wrap items-center justify-between mx-auto p-4">
+        <div className="max-w-full flex  items-center justify-between mx-auto p-4">
           <a href="https://flowbite.com/" className="flex items-center space-x-3 rtl:space-x-reverse">
             <img src="https://flowbite.com/docs/images/logo.svg" className="h-8" alt="Flowbite Logo" />
             <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Flowbite</span>
@@ -41,14 +72,20 @@ const Navbar = () => {
 
           {/* icon */}
           <div className="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-            <button onClick={toggleDarkMode} className={`mr-4 p-1 rounded-full ${!darkMode ? 'bg-gray-200' : 'text-white'}`}>
+            {/* <button onClick={toggleDarkMode} className={`mr-4 p-1 rounded-full ${!darkMode ? 'bg-gray-200' : 'text-white'}`}>
               <MoonStar />
-            </button>
+            </button> */}
 
-            <button type="button" className="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600">
-              <span className="sr-only">Open user menu</span>
-              <img className="w-8 h-8 rounded-full" src={Gojo} alt="user photo" />
-            </button>
+            {
+              user ? <div className='flex gap-2'>
+                <button type="button" className="flex text-sm  rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600">
+                  <span className="sr-only">Open user menu</span>
+                  <img className="w-8 h-8 rounded-full" src={account} alt="user photo" />
+                </button>
+
+                <button onClick={handdleLogout} type='button' className='bg-red-400 px-1 rounded-md text-sm'>Logout</button>
+              </div> : <button onClick={() => setisPopupOpen(!isMenuOpen)} className='text-[12px] pt-1 hover:text-orange-400'>เข้าสู่ระบบ/สมัครสมาชิก</button>
+            }
 
             <button onClick={toggleMenu} type="button" className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
               <span className="sr-only">Open main menu</span>
@@ -87,15 +124,13 @@ const Navbar = () => {
           </div>
 
           {/* Submenu */}
-          <div className={`${isMenuOpen ? "block w-[300px]" : "w-[0px]"
-            } top-3 right-0 z-10 absolute transition-all duration-500 ease-in-out items-center justify-between md:hidden`}>
-
+          <div className={`${isMenuOpen ? "translate-x-0" : "translate-x-full"} top-3 right-0 z-10 fixed transition-all duration-500 ease-in-out items-center justify-between md:hidden`}>
             <div className='flex justify-between items-start bg-gray-300'>
               <a href='#' className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Menu</a>
               <button onClick={toggleMenu} className='font-bold text-2xl px-3 text-black'>x</button>
             </div>
 
-            <ul className={`flex flex-col font-medium p-4 md:p-0  border border-gray-100 bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700`}>
+            <ul className={`flex flex-col font-medium p-4 md:p-0 border border-gray-100 bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700`}>
               <li>
                 <Link to={'/'} className="block py-2 px-3 text-gray-900 rounded md:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:text-blue-500" >Home</Link>
               </li>
@@ -115,11 +150,9 @@ const Navbar = () => {
           </div>
 
         </div>
-      </nav>
-
-
-
-    </div>
+      </nav >
+      {popup}
+    </div >
   )
 }
 

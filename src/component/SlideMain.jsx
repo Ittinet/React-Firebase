@@ -1,3 +1,6 @@
+import banner1 from '../assets/img1/banner/2.jpg'
+import banner2 from '../assets/img1/banner/parallax.jpg'
+
 // Import Swiper React components
 import { Swiper, SwiperSlide } from 'swiper/react';
 
@@ -16,9 +19,9 @@ const SlideMain = () => {
                 <Swiper
                     modules={[Navigation, Pagination, EffectFade, EffectCoverflow, Autoplay]}
                     spaceBetween={0}
-                    autoplay={{
-                        delay: 5000
-                    }}
+                    // autoplay={{
+                    //     delay: 5000
+                    // }}
                     pagination={{
                         el: '.swiper-pagination',
                         type: 'bullets',
@@ -34,9 +37,44 @@ const SlideMain = () => {
                 // onSwiper={(swiper) => console.log(swiper)}
                 >
                     <SwiperSlide>
-                        <div className='max-h-[80vh] max-w-[100%] m-auto'><img className='h-full w-[100%] m-auto object-cover' src="https://www.mcshop.com/media/.renditions/wysiwyg/homepage/banner/mcshop-Spot-Club-2880x1280.jpg?auto=webp&format=pjpg&quality=85" alt="" /></div></SwiperSlide>
-                    <SwiperSlide><div className='max-h-[80vh] max-w-[100%] m-auto'><img className='h-full w-[100%] m-auto object-cover' src="https://www.mcshop.com/media/wysiwyg/mcshop-Gold_selvedge-2880_1.jpg?auto=webp&format=pjpg&quality=85" alt="" /></div></SwiperSlide>
-                    <SwiperSlide><div className='max-h-[80vh] max-w-[100%] m-auto'><img className='h-full w-[100%] m-auto object-cover' src="https://www.mcshop.com/media/.renditions/wysiwyg/homepage/banner/mcshop-ONLINE-EX-2880x1280.jpg?auto=webp&format=pjpg&quality=85" alt="" /></div></SwiperSlide>
+                        <div className='w-full max-h-[80vh] m-auto'>
+                            <div className='BannerSlide-1 grid grid-cols-4 px-5'>
+                                <div className='col-span-2 flex justify-center items-center ml-16 mb-26 flex-col'>
+                                    <p className='text-3xl font-bold'>Shop in your Dream</p>
+                                    <h1>Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga, voluptatum.</h1>
+                                    <h1>Lorem, ipsum dolor sit amet consectetur adipisicing elit.</h1>
+                                    <button className='bg-orange-600 px-2 py-1 mt-5 text-lg'>Shop Now!</button>
+                                </div>
+                                <div className='absolute w-full h-full bg-white top-0 opacity-20 z-10'>
+                                </div>
+                            </div>
+                        </div></SwiperSlide>
+
+                    <SwiperSlide><div className='w-full max-h-[80vh] m-auto'>
+                        <div className='BannerSlide-2 grid grid-cols-4 px-5'>
+                            <div className='col-span-2 flex justify-center items-center ml-16 mb-26 flex-col'>
+                                <p className='text-3xl font-bold'>Shop in your Dream</p>
+                                <h1>Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga, voluptatum.</h1>
+                                <h1>Lorem, ipsum dolor sit amet consectetur adipisicing elit.</h1>
+                                <button className='bg-orange-600 px-2 py-1 mt-5 text-lg'>Shop Now!</button>
+                            </div>
+                            <div className='absolute w-full h-full bg-white top-0 opacity-20 z-10'>
+                            </div>
+                        </div>
+                    </div></SwiperSlide>
+
+                    <SwiperSlide><div className='w-full max-h-[80vh] m-auto'>
+                        <div className='BannerSlide-3 grid grid-cols-4 px-5'>
+                            <div className='col-span-2 flex justify-center items-center ml-16 mb-26 flex-col'>
+                                <p className='text-3xl font-bold'>Shop in your Dream</p>
+                                <h1>Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga, voluptatum.</h1>
+                                <h1>Lorem, ipsum dolor sit amet consectetur adipisicing elit.</h1>
+                                <button className='bg-orange-600 px-2 py-1 mt-5 text-lg'>Shop Now!</button>
+                            </div>
+                            <div className='absolute w-full h-full bg-white top-0 opacity-20 z-10'>
+                            </div>
+                        </div>
+                    </div></SwiperSlide>
 
                     {/* เพิ่มลูกศรเพื่อการนำทาง */}
                     <div className='swiper-pagination'></div>
