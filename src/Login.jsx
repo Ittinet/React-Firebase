@@ -1,9 +1,15 @@
 import { useState, useEffect } from 'react';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
-import { authdb } from './config/firebase';
+import { authdb, db } from './config/firebase';
+import { addDoc, collection, doc, setDoc } from 'firebase/firestore';
+import usefbStore from './Store/store';
+
 
 
 const Login = (props) => {
+    const signup = usefbStore((state) => state.signup)
+    const signin = usefbStore((state) => state.signin)
+
     const [loginSlide, setLoginSlide] = useState(false)
 
     const [registerform, setRegisterForm] = useState({
@@ -50,8 +56,7 @@ const Login = (props) => {
             if (registerform.password !== registerform.confirmpassword) {
                 return console.log('กรุณากรอกรหัสผ่านให้ตรงกัน')
             }
-            const userSignup = await createUserWithEmailAndPassword(authdb, registerform.email, registerform.password)
-            const user = userSignup.user
+            const user = await signup(registerform.email, registerform.confirmpassword)
             setRegisterForm({
                 email: '',
                 password: '',
@@ -76,15 +81,12 @@ const Login = (props) => {
     const submitLogin = async (e) => {
         try {
             e.preventDefault()
-            const userSigin = await signInWithEmailAndPassword(authdb, loginform.email, loginform.password)
-            const user = userSigin.user
+            const user = await signin(loginform.email, loginform.password)
             setLoginForm({
                 ...loginform,   // คงค่า email
                 password: ''    // รีเซ็ต password
             });
-
             props.isClosePopup();
-
             console.log(user)
         } catch (error) {
             if (error.code === 'auth/invalid-credential') {

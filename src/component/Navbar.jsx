@@ -62,7 +62,7 @@ const Navbar = () => {
 
 
 
-      <nav className="bg-white border-gray-200 dark:bg-gray-900 relative shadow-lg">
+      <nav className="bg-white border-gray-200 dark:bg-gray-900 relative shadow-lg z-50">
         {/* Logo */}
         <div className="max-w-full flex  items-center justify-between mx-auto p-4">
           <a href="https://flowbite.com/" className="flex items-center space-x-3 rtl:space-x-reverse">

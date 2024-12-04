@@ -15,7 +15,7 @@ import { Autoplay, EffectCoverflow, EffectFade, Navigation, Pagination } from 's
 const SlideMain = () => {
     return (
         <div>
-            <div>
+            <div className='shadow-lg'>
                 <Swiper
                     modules={[Navigation, Pagination, EffectFade, EffectCoverflow, Autoplay]}
                     spaceBetween={0}
@@ -40,15 +40,16 @@ const SlideMain = () => {
                         <div className='w-full max-h-[80vh] m-auto'>
                             <div className='BannerSlide-1 grid grid-cols-4 px-5'>
                                 <div className='col-span-2 flex justify-center items-center ml-16 mb-26 flex-col'>
-                                    <p className='text-3xl font-bold'>Shop in your Dream</p>
+                                    <p className='text-3xl font-bold'>Shop in Dream</p>
                                     <h1>Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga, voluptatum.</h1>
                                     <h1>Lorem, ipsum dolor sit amet consectetur adipisicing elit.</h1>
-                                    <button className='bg-orange-600 px-2 py-1 mt-5 text-lg'>Shop Now!</button>
+                                    <button className='bg-teal-700 text-white font-bold px-2 py-1 mt-5 text-lg'>Shop Now!</button>
                                 </div>
                                 <div className='absolute w-full h-full bg-white top-0 opacity-20 z-10'>
                                 </div>
                             </div>
-                        </div></SwiperSlide>
+                        </div>
+                    </SwiperSlide>
 
                     <SwiperSlide><div className='w-full max-h-[80vh] m-auto'>
                         <div className='BannerSlide-2 grid grid-cols-4 px-5'>

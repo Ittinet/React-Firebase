@@ -26,13 +26,15 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
 
-import Login from '../Login'
-import Register from '../../Register'
 import Home from '../Home'
-import Game from '../Page/Game'
 import Shop from '../Shop'
-import Navbar from '../component/Navbar'
 import Layout from '../component/Layout'
+import ProtectAdmin from './ProtectAdmin'
+import LayoutAdmin from '../component/LayoutAdmin'
+import Dashboard from '../Page/Admin/Dashboard'
+import Manage from '../Page/Admin/Manage'
+import Category from '../Page/Admin/Category'
+import Product from '../Page/Admin/Product'
 
 
 const router = createBrowserRouter([
@@ -41,7 +43,17 @@ const router = createBrowserRouter([
         element: <Layout />,
         children: [
             { index: true, element: <Home /> },
-            { path: '/shop', element: <Shop /> }
+            { path: 'shop', element: <Shop /> }
+        ]
+    },
+    {
+        path: '/admin',
+        element: <ProtectAdmin element={<LayoutAdmin />} />,
+        children: [
+            { index: true, element: <Dashboard /> },
+            { path: 'manage', element: <Manage /> },
+            { path: 'category', element: <Category /> },
+            { path: 'product', element: <Product /> },
         ]
     }
 

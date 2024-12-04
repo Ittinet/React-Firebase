@@ -254,7 +254,7 @@
   filter: drop-shadow(7px 10px 5px #999);
 }
 
-.container-grid-content1 {
+.container-grid-product {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
   grid-template-rows: auto; /* ให้แถวปรับตามเนื้อหา */
@@ -263,23 +263,41 @@
 }
 
 .BannerSlide-1 {
+  background-image: url("./assets/img1/banner/banner-3.png");
+  background-size: cover;
+  background-position: calc(50% + 0px) calc(50% - -0px);
+  width: 100%;
+  height: 80vh;
+}
+
+.BannerSlide-2 {
   background-image: url("./assets/img1/banner/parallax.jpg");
   background-size: cover;
   background-position: calc(50% + 0px) calc(50% - -0px);
   width: 100%;
   height: 80vh;
 }
-.BannerSlide-2 {
-  background-image: url("./assets/img1/banner/2.jpg");
+
+.BannerSlide-3 {
+  background-image: url("./assets/img1/banner/slider0.jpg");
   background-size: cover;
   background-position: calc(50% + 0px) calc(50% - -0px);
   width: 100%;
   height: 80vh;
 }
-.BannerSlide-3 {
-  background-image: url("./assets/img1/back.jpg");
-  background-size: cover;
-  background-position: calc(50% + 0px) calc(50% - -0px);
-  width: 100%;
-  height: 80vh;
+
+.gird-content-1 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 30px;
+}
+
+.sdsd {
+  background-color: rgb(179, 231, 218);
+}
+
+.container-grid-shop {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
 }

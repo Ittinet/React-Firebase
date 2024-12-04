@@ -1,11 +1,48 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from 'zustand/middleware'
-import { authdb } from "../config/firebase";
-import { signOut } from "firebase/auth";
+import { authdb, db } from "../config/firebase";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 
 const fbStore = (set, get) => ({
+    usercheck: null,
     user: null,
     unsubscribe: null,
+    signin: async (email, password) => {
+        const Sigin = await signInWithEmailAndPassword(authdb, email, password)
+        const usersignin = Sigin.user
+        set({
+            usercheck: usersignin.uid
+        })
+        console.log('user in zustand', usersignin)
+        return usersignin
+
+    },
+    signup: async (email, password) => {
+        const signup = await createUserWithEmailAndPassword(authdb, email, password)
+        const usersignup = signup.user
+        set({
+            usercheck: usersignup.uid
+        })
+        const useridEdit = usersignup.uid.match(/\d+/g)
+        const userid = useridEdit.join('')
+        const userRef = doc(db, "users", userid);
+        await setDoc(userRef, {
+            uid: usersignup.uid,
+            email: usersignup.email,
+            role: 'user',
+            username: '',
+            phone: '',
+            address: '',
+            cart: 0,
+            activate: 'true',
+            createAt: serverTimestamp()
+        });
+        console.log('user in zustand', usersignup)
+        return usersignup
+
+
+    },
     init: () => {
         const unsubscribe = authdb.onAuthStateChanged((user) => {
             if (user) {
@@ -35,6 +72,11 @@ const fbStore = (set, get) => ({
     logout: async () => {
         try {
             await signOut(authdb)
+            set({
+                usercheck: null,
+                user: null,
+                unsubscribe: null
+            })
         } catch (error) {
             console.log('Logout Failed', error.message)
         }
@@ -57,9 +99,9 @@ const fbStore = (set, get) => ({
 const usePersist = {
     name: 'fb-store',
     storage: createJSONStorage(() => localStorage),
-    partial: (state) => ({
-        user: state.user
-    })
+    // partial: (state) => ({
+    //     user: state.user
+    // })
 }
 
 const usefbStore = create(persist(fbStore, usePersist))

@@ -10,6 +10,16 @@
 }
 
 body {
-  font-family: "Sour Gummy", sans-serif;
+  font-family: "Comfortaa", sans-serif;
+  font-weight: 500;
+  font-style: normal;
   /* background-color: #faf7f0; */
+}
+
+.swiper-pagination-bullet {
+  background-color: black; /* เปลี่ยนสีเป็นเทา */
+}
+
+.swiper-pagination-bullet-active {
+  background-color: #000; /* เปลี่ยนสีเป็นดำ */
 }

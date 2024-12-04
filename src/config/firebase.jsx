@@ -3,6 +3,7 @@ import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getFirestore } from 'firebase/firestore';
 import { getAuth } from "firebase/auth";
+import { getStorage } from 'firebase/storage'
 
 
 
@@ -16,7 +17,22 @@ const firebaseConfig = {
     measurementId: "G-N8JNX4Z99Q"
 };
 
+const firebaseimgConfig = {
+    apiKey: "AIzaSyBbCL-mb2Q-VTEt79fWjOPPKOiQ_6xRHtE",
+    authDomain: "projectwtelogin-b9a23.firebaseapp.com",
+    databaseURL: "https://projectwtelogin-b9a23-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "projectwtelogin-b9a23",
+    storageBucket: "projectwtelogin-b9a23.appspot.com",
+    messagingSenderId: "450276017058",
+    appId: "1:450276017058:web:bcbba6579f13645c9ca8fb",
+    measurementId: "G-L1JD3CM4P8"
+};
+
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app)
 export const authdb = getAuth(app)
+
+
+const appimg = initializeApp(firebaseimgConfig, "appimg");
+export const storageimg = getStorage(appimg)
