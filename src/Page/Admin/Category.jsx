@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react"
-import { createCategory, DeleteCategory, deleteFiles, getCategory } from "../../backend/CategoryAPI"
+import { createCategory, DeleteCategory, getCategory } from "../../backend/CategoryAPI"
 import { Trash2 } from 'lucide-react';
 import { toast } from "react-toastify";
-import UploadFile from "../../component/Admin/UploadFile";
+import UploadFileCategory from "../../component/Admin/UploadFileCategory";
 
 const initialState = {
     name: '',
@@ -16,9 +16,7 @@ const Category = () => {
     useEffect(() => {
         const unsubscribe = getCategory((item) => {
             setData(item)
-            console.log('data', item)
         });
-        console.log(form)
         return () => unsubscribe();
     }, [])
 
@@ -49,10 +47,9 @@ const Category = () => {
         }
     }
 
-    const removeCategory = async (item) => {
+    const removeCategory = async (data) => {
         try {
-            await DeleteCategory(item.docid)
-            await deleteFiles(item.images[0].fileref)
+            await DeleteCategory(data)
         } catch (error) {
             console.log(error)
         }
@@ -63,7 +60,7 @@ const Category = () => {
         <div className="bg-white w-full p-5">
             <div className="flex gap-5">
                 <input name="name" onChange={handleChange} onKeyDown={handleKeyPress} value={form.name} className="bg-blue-100" type="text" />
-                <UploadFile form={form} setForm={setForm} />
+                <UploadFileCategory form={form} setForm={setForm} />
             </div>
             <button onClick={addCategory} className="bg-green-400 p-2 mt-5">Add</button>
             <hr className="mt-5" />
@@ -71,8 +68,9 @@ const Category = () => {
                 {
                     data.map((item, index) =>
                         <div key={index} className="flex justify-between  items-center  mb-3 border-b py-3" >
-                            <div className="max-w-[100px]"><img src={item.images[0]?.imageurl} alt="" /></div>
-                            <li >{item.name}</li>
+                            <p>{item.category_id}</p>
+                            <div className="max-w-[100px]"><img src={item.category_images[0]?.imageurl} alt="" /></div>
+                            <li >{item.category_name}</li>
                             <button onClick={() => removeCategory(item)} className="text-sm bg-red-400 p-1 rounded-lg"><Trash2 size={14} /></button>
                         </div>
                     )

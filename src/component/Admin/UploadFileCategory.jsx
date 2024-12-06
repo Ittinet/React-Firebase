@@ -3,9 +3,8 @@ import { toast } from 'react-toastify'
 import Resize from 'react-image-file-resizer'
 import { deleteFiles, uploadFiles } from '../../backend/CategoryAPI'
 
-const UploadFile = ({ form, setForm }) => {
+const UploadFileCategory = ({ form, setForm }) => {
     const [isLoading, setIsLoading] = useState(false)
-    console.log('formimage', form)
     const handleOnChange = (e) => {
         const files = e.target.files
         if (files) {
@@ -61,8 +60,6 @@ const UploadFile = ({ form, setForm }) => {
                 ...form,
                 images: filterImages
             })
-            console.log('filter', filterImages)
-            console.log(res)
         } catch (error) {
             console.log(error)
         }
@@ -70,7 +67,7 @@ const UploadFile = ({ form, setForm }) => {
     }
     return (
         <div>
-            <input onChange={handleOnChange} type="file" name='images' multiple />
+            <input onChange={handleOnChange} type="file" name='images' />
             {
                 form.images.map((item, index) =>
                     <div key={index} className='w-32 h-32 relative'>
@@ -84,4 +81,4 @@ const UploadFile = ({ form, setForm }) => {
     )
 }
 
-export default UploadFile
+export default UploadFileCategory

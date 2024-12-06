@@ -24,17 +24,18 @@ const fbStore = (set, get) => ({
         set({
             usercheck: usersignup.uid
         })
-        const useridEdit = usersignup.uid.match(/\d+/g)
-        const userid = useridEdit.join('')
-        const userRef = doc(db, "users", userid);
+        const userRef = doc(db, "users", usersignup.uid);
         await setDoc(userRef, {
             uid: usersignup.uid,
             email: usersignup.email,
             role: 'user',
             username: '',
             phone: '',
+            fullname:'',
             address: '',
-            cart: 0,
+            carts: [],
+            orders: [],
+            picture: [],
             activate: 'true',
             createAt: serverTimestamp()
         });
