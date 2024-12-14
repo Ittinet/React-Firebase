@@ -1,7 +1,8 @@
-import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, limit, onSnapshot, orderBy, query, serverTimestamp, where } from "firebase/firestore"
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, limit, onSnapshot, orderBy, query, serverTimestamp, updateDoc, where } from "firebase/firestore"
 import { db, storageimg } from "../config/firebase"
 import { toast } from "react-toastify"
 import { deleteObject, getDownloadURL, ref, uploadBytes } from "firebase/storage"
+import { v4 as uuidv4 } from 'uuid';
 
 
 export const createProduct = async (form) => {
@@ -46,14 +47,14 @@ export const createProduct = async (form) => {
             category_name: categoryData[0]?.category_name,
             product_id: newId,
             product_name: form.product_name,
-            product_price: form.product_price,
+            product_price: parseInt(form.product_price),
             product_gender: form.product_gender,
             product_size: form.product_size,
             product_color: form.product_color,
             product_description: form.product_description,
-            product_stock: form.product_stock,
+            product_stock: parseInt(form.product_stock),
             product_images: form.product_images,
-            product_sold: 0,
+            product_sold: parseInt(0),
             createAt: serverTimestamp(),
             updateAt: serverTimestamp()
         })
@@ -70,7 +71,12 @@ export const createProduct = async (form) => {
 
 export const getProducts = (callback) => {
     try {
-        const unsubscribe = onSnapshot(collection(db, 'products'), (snapshot) => {
+        const q = query(
+            collection(db, 'products'),
+            orderBy('product_name') // ใช้ orderBy ตามฟิลด์ที่คุณต้องการ เช่น "price"
+        );
+
+        const unsubscribe = onSnapshot(q, (snapshot) => {
             const data = snapshot.docs.map((doc) => ({
                 docid: doc.id,
                 ...doc.data()
@@ -118,7 +124,8 @@ export const DeleteProduct = async (data) => {
 
 export const uploadFileProduct = async (file) => {
     try {
-        const path = '/files/products/' + file.name
+        const fileName = uuidv4() + '.' + file.name.split('.').pop();
+        const path = '/test/products/' + fileName
         const fileRef = ref(storageimg, path)
         const snapshot = await uploadBytes(fileRef, file)
         const imgURL = await getDownloadURL(fileRef)
@@ -183,3 +190,104 @@ export const readProduct = async (id) => {
         console.error(error)
     }
 }
+
+export const editProduct = async (form) => {
+    try {
+        const q = query(collection(db, 'products'), where('product_id', '==', form.product_id))
+        const querysnapshot = await getDocs(q)
+        const qCategory = query(collection(db, 'categories'), where('category_id', '==', form.category_id))
+        const queryCategory = await getDocs(qCategory)
+        let categoryName = null
+
+        if (queryCategory.empty) {
+            toast.error('เกิดข้อผิดพลาดเกี่ยวกับหมวดหมู่สินค้า')
+            return
+        }
+
+        for (const docCategory of queryCategory.docs) {
+            categoryName = docCategory.data().category_name
+        }
+
+        if (!querysnapshot.empty) {
+            for (const doc of querysnapshot.docs) {
+                await updateDoc(doc.ref, {
+                    ...form,
+                    updateAt: serverTimestamp(),
+                    category_name: categoryName,
+                    product_price: parseInt(form.product_price),
+                    product_stock: parseInt(form.product_stock),
+                    product_sold: parseInt(form.product_sold)
+                })
+            }
+            toast.success('อัพเดทข้อมูลสำเร็จ!')
+            return {
+                ...form,
+                updateAt: serverTimestamp(),
+                category_name: categoryName
+            }
+        } else {
+            console.log('No matching documents found')
+        }
+    } catch (error) {
+        console.error(error)
+    }
+
+}
+
+export const filterProduct = async ({ genders, size, searchtext, searchcategories, searchColor, price }) => {
+    try {
+        let Data = []
+        let q = query(collection(db, 'products'))
+        if (genders && genders.length > 0) {
+            q = query(q, where("product_gender", "in", genders))
+
+        }
+        if (size && size.length > 0) {
+            q = query(q, where("product_size", "in", size))
+
+        }
+        if (searchcategories) {
+            q = query(
+                q,
+                where("category_name", "==", searchcategories),
+            )
+        }
+        if (searchColor && searchColor.length > 0) {
+            q = query(
+                q,
+                where("product_color", "in", searchColor)
+            )
+        }
+
+        // q = query(q, orderBy("product_price", "asc"));
+
+        const querysnapshot = await getDocs(q)
+
+        for (const doc of querysnapshot.docs) {
+            const product = doc.data();
+            if (searchtext || price.length === 2) {
+                if (searchtext) {
+                    if (product.product_name.toLowerCase().includes(searchtext.toLowerCase())) {
+                        Data.push(product);
+                    }
+                }
+                if (price.length === 2) {
+                    if (product.product_price >= price[0] && product.product_price <= price[1]) {
+                        Data.push(product);
+                    }
+                }
+            } else {
+                Data.push(product)
+            }
+        }
+
+
+        return Data
+    } catch (error) {
+        console.error(error);
+        return [];
+    }
+};
+
+
+

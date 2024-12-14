@@ -82,7 +82,7 @@ export const DeleteCategory = async (data) => {
 
 export const uploadFiles = async (file) => {
     try {
-        const path = '/files/categories/' + file.name
+        const path = '/test/categories/' + file.name
         const fileref = ref(storageimg, path)
 
         const snapshot = await uploadBytes(fileref, file)

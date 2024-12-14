@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 import account from '../assets/images/account.png'
 import usefbStore from '../Store/store';
 import Login from '../Login';
+import CartSlide from './User/CartSlide';
+import usedataStore from '../store/datastore';
 
 const Navbar = () => {
 
@@ -11,6 +13,7 @@ const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [darkMode, setdarkMode] = useState(false);
   const [isPopupOpen, setisPopupOpen] = useState(false);
+  const [isCartOpen, setisCartOpen] = useState(false)
 
   const init = usefbStore(state => state.init)
   const user = usefbStore(state => state.user)
@@ -23,6 +26,7 @@ const Navbar = () => {
   } else {
     popup = null
   }
+
 
   useEffect(() => {
     if (darkMode) {
@@ -41,7 +45,6 @@ const Navbar = () => {
   }, [init, stopListening])
 
 
-
   const handdleLogout = async () => {
     await logout()
     console.log('Logut Complete')
@@ -55,6 +58,14 @@ const Navbar = () => {
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
+
+  const handleCartOpen = () => {
+    setisCartOpen(true)
+  }
+
+  const handleCartClose = () => {
+    setisCartOpen(false)
+  }
 
 
   return (
@@ -77,7 +88,11 @@ const Navbar = () => {
             </button> */}
 
             {
-              user ? <div className='flex gap-2'>
+              user ? <div className='flex gap-2 '>
+                <button onClick={handleCartOpen} className='flex items-center'>
+                  <ShoppingCart size={25} />
+                </button>
+
                 <button type="button" className="flex text-sm  rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600">
                   <span className="sr-only">Open user menu</span>
                   <img className="w-8 h-8 rounded-full" src={account} alt="user photo" />
@@ -152,6 +167,9 @@ const Navbar = () => {
         </div>
       </nav >
       {popup}
+      {/* {isCartOpen && <CartSlide onclose={handleCartClose} isCartOpen={isCartOpen} />} */}
+      <CartSlide onclose={handleCartClose} isCartOpen={isCartOpen} />
+
     </div >
   )
 }

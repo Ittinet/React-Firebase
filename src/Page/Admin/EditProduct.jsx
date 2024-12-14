@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { getCategory } from "../../backend/CategoryAPI"
-import { createProduct, DeleteProduct, getProducts, readProduct } from "../../backend/ProductAPI"
+import { createProduct, DeleteProduct, editProduct, getProducts, readProduct } from "../../backend/ProductAPI"
 import UploadFileProduct from "../../component/Admin/UploadFileProduct"
 import { useNavigate, useParams } from "react-router-dom"
 
@@ -45,6 +45,7 @@ const EditProduct = () => {
         setForm(res.ProductData[0])
         console.log(res)
     }
+    console.log('form', form)
 
     const handleChange = (e) => {
         setForm({
@@ -54,24 +55,17 @@ const EditProduct = () => {
 
     }
 
-    const handleSubmit = () => {
-        createProduct(form)
+    const handleUpdate = () => {
+        editProduct(form)
             .then((res) => {
-                console.log(res)
-                setForm(initialState)
+                if (res) {
+                    setForm(form)
+                    navigate(-1)
+                }
             })
             .catch((error) => {
                 console.error(error)
             })
-    }
-
-    const handleDelete = async (data) => {
-        try {
-            await DeleteProduct(data)
-        } catch (error) {
-            console.error(error)
-        }
-
     }
     // console.log(form)
 
@@ -81,8 +75,8 @@ const EditProduct = () => {
             <div className="flex gap-20">
                 <div className="flex flex-col gap-2">
                     <span>Category</span>
-                    <select className="bg-gray-100 p-1" value={form.category_id} name="category_id" onChange={handleChange} id="">
-                        <option className="" value=''>Please Select</option>
+                    <select className="bg-gray-100 p-1" value={form.category_id} name="category_id" required onChange={handleChange} id="">
+                        <option className="" value='' disabled>Please Select</option>
                         {
                             categoryData.map((item, index) =>
                                 <option key={index} value={item.category_id}>{item.category_name}</option>
@@ -93,7 +87,7 @@ const EditProduct = () => {
                     price <input className="bg-gray-100" onChange={handleChange} value={form.product_price} name="product_price" type="text" />
                     gender <input className="bg-gray-100" onChange={handleChange} value={form.product_gender} name="product_gender" type="text" />
                     size <input className="bg-gray-100" onChange={handleChange} value={form.product_size} name="product_size" type="text" />
-                    <button onClick={handleSubmit} className="bg-yellow-400 mt-2">Edit</button>
+                    <button onClick={handleUpdate} className="bg-yellow-400 mt-2">Edit</button>
                 </div>
 
                 <div className="flex flex-col">

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 import { authdb, db } from './config/firebase';
 import { addDoc, collection, doc, setDoc } from 'firebase/firestore';
-import usefbStore from './Store/store';
+import usefbStore from './store/store';
 
 
 

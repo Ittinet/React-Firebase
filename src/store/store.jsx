@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { persist, createJSONStorage } from 'zustand/middleware'
 import { authdb, db } from "../config/firebase";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
-import { doc, serverTimestamp, setDoc } from "firebase/firestore";
+import { collection, doc, getDocs, onSnapshot, query, serverTimestamp, setDoc, where } from "firebase/firestore";
 
 const fbStore = (set, get) => ({
     usercheck: null,
@@ -31,7 +31,7 @@ const fbStore = (set, get) => ({
             role: 'user',
             username: '',
             phone: '',
-            fullname:'',
+            fullname: '',
             address: '',
             carts: [],
             orders: [],
@@ -45,17 +45,19 @@ const fbStore = (set, get) => ({
 
     },
     init: () => {
-        const unsubscribe = authdb.onAuthStateChanged((user) => {
+        const unsubscribe = authdb.onAuthStateChanged(async (user) => {
             if (user) {
                 // ถ้ามีผู้ใช้ล็อคอิน
                 set({
-                    user: user
+                    user: user,
+                    usercheck: user.uid
                 }); // เก็บข้อมูลของผู้ใช้ที่ล็อคอินใน state
                 console.log(user)
             } else {
                 // ถ้าไม่มีผู้ใช้ล็อคอิน
                 set({
-                    user: null
+                    user: null,
+                    usercheck: null
                 });
                 console.log('no login')
             }
@@ -76,20 +78,15 @@ const fbStore = (set, get) => ({
             set({
                 usercheck: null,
                 user: null,
-                unsubscribe: null
+                unsubscribe: null,
             })
         } catch (error) {
             console.log('Logout Failed', error.message)
         }
-    }
+    },
+
 
 })
-
-
-
-
-
-
 
 
 
@@ -101,7 +98,8 @@ const usePersist = {
     name: 'fb-store',
     storage: createJSONStorage(() => localStorage),
     // partial: (state) => ({
-    //     user: state.user
+    //     user: state.user,
+    //     usercheck: state.usercheck,
     // })
 }
 

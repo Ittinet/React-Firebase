@@ -1,0 +1,23 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "products",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "product_gender",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "product_size",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "product_price",
+          "order": "ASCENDING"
+        }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}

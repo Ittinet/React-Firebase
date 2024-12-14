@@ -14,7 +14,9 @@ const ProtectAdmin = ({ element }) => {
                 const q = query(collection(db, 'users'), where('uid', '==', usercheck))
                 const querySnapshot = await getDocs(q)
                 if (querySnapshot.empty) {
-                    return console.log('ไม่มี user นี้ในระบบ')
+                    setok(false)
+                    console.log('ไม่มี user นี้ในระบบ')
+                    return
                 }
                 const data = querySnapshot.docs[0].data()
                 if (data.role === 'admin') {

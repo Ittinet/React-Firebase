@@ -3,6 +3,7 @@ import { getCategory } from "../../backend/CategoryAPI"
 import { createProduct, DeleteProduct, getProducts } from "../../backend/ProductAPI"
 import UploadFileProduct from "../../component/Admin/UploadFileProduct"
 import { Link } from "react-router-dom"
+import { toast } from "react-toastify"
 
 const initialState = {
     category_id: '',
@@ -22,7 +23,7 @@ const Product = () => {
     const [categoryData, setCategoryData] = useState([])
     const [productData, setProductData] = useState([])
 
-    
+
     useEffect(() => {
         const unsubscribeProducts = getProducts((data) => {
             setProductData(data)
@@ -37,21 +38,27 @@ const Product = () => {
             unsubscribeProducts()
         }
     }, [])
-    console.log(productData)
+    // console.log(productData)
     // console.log('form', form)
     const handleChange = (e) => {
         setForm({
             ...form,
             [e.target.name]: e.target.value
         })
-
+        console.log('update', form)
     }
 
     const handleSubmit = () => {
+        if (!form.category_id) {
+            return toast.error('กรุณาเลือกหมวดหมู่')
+        }
+        if (!form.product_name) {
+            return toast.error('กรุณาใส่ชื่อสินค้า')
+        }
         createProduct(form)
             .then((res) => {
                 console.log(res)
-                setForm(initialState)
+                setForm({ ...initialState, category_id: '' });
             })
             .catch((error) => {
                 console.error(error)
@@ -74,8 +81,8 @@ const Product = () => {
             <div className="flex gap-20">
                 <div className="flex flex-col gap-2">
                     <span>Category</span>
-                    <select className="bg-gray-100 p-1" name="category_id" onChange={handleChange} id="">
-                        <option className="" value=''>Please Select</option>
+                    <select className="bg-gray-100 p-1" name="category_id" value={form.category_id} required onChange={handleChange} id="">
+                        <option className="" value='' disabled>Please Select</option>
                         {
                             categoryData.map((item, index) =>
                                 <option key={index} value={item.category_id}>{item.category_name}</option>
@@ -83,8 +90,14 @@ const Product = () => {
                         }
                     </select>
                     name <input className="bg-gray-100" onChange={handleChange} value={form.product_name} name="product_name" type="text" />
-                    price <input className="bg-gray-100" onChange={handleChange} value={form.product_price} name="product_price" type="text" />
-                    gender <input className="bg-gray-100" onChange={handleChange} value={form.product_gender} name="product_gender" type="text" />
+                    price <input className="bg-gray-100" onChange={handleChange} value={form.product_price} name="product_price" type="number" />
+                    <span>gender</span>
+                    <select value={form.product_gender} required name="product_gender" onChange={handleChange} id="">
+                        <option value="" disabled>Please Select</option>
+                        <option value="male">Male</option>
+                        <option value="female">FeMale</option>
+                        <option value="both">Both</option>
+                    </select>
                     size <input className="bg-gray-100" onChange={handleChange} value={form.product_size} name="product_size" type="text" />
                     <button onClick={handleSubmit} className="bg-green-400 mt-2">Add</button>
                 </div>
@@ -92,7 +105,7 @@ const Product = () => {
                 <div className="flex flex-col">
                     color <input className="bg-gray-100" onChange={handleChange} value={form.product_color} name="product_color" type="text" />
                     description <input className="bg-gray-100" onChange={handleChange} value={form.product_description} name="product_description" type="text" />
-                    stock <input className="bg-gray-100" onChange={handleChange} value={form.product_stock} name="product_stock" type="text" />
+                    stock <input className="bg-gray-100" onChange={handleChange} value={form.product_stock} name="product_stock" type="number" />
                     <UploadFileProduct form={form} setForm={setForm} />
                 </div>
 
@@ -116,6 +129,7 @@ const Product = () => {
                                         )
                                     }
                                 </li>
+                                <li>{item.category_name}</li>
                                 <li>{item.product_name}</li>
                                 <div>
                                     <button onClick={() => handleDelete(item)} className="bg-red-400 px-2 text-sm">x</button>

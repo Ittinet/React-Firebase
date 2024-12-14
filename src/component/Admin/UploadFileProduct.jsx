@@ -37,8 +37,8 @@ const UploadFileProduct = ({ form, setForm }) => {
                 }
                 Resizer.imageFileResizer(
                     file,
-                    720,
-                    720,
+                    1080,
+                    1080,
                     "PNG",
                     100,
                     0,
