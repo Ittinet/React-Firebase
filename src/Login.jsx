@@ -26,11 +26,12 @@ const Login = (props) => {
     const [user, setUser] = useState(null)
 
     useEffect(() => {
-        document.documentElement.style.overflowY = 'hidden'
-        return () => {
+        if (props.isPopupOpen) {
+            document.documentElement.style.overflowY = 'hidden'
+        } else {
             document.documentElement.style.overflowY = 'auto'
         }
-    }, []);
+    }, [props.isClosePopup]);
 
     const onactionSlide = () => {
         setLoginSlide(!loginSlide)
@@ -43,6 +44,10 @@ const Login = (props) => {
         })
 
     }
+    const handleInnerClick = (e) => {
+        e.stopPropagation(); // ป้องกันไม่ให้คลิกส่งไปยัง outer div
+    };
+
     const handleChangeLogin = (e) => {
         setLoginForm({
             ...loginform,
@@ -99,11 +104,8 @@ const Login = (props) => {
         }
     }
 
-    const handleOuterClick = (e) => {
-        if (e.target === e.currentTarget) {
-            props.isClosePopup(); // ปิด popup
-        }
-
+    const handleOuterClick = () => {
+        props.isClosePopup(); // ปิด popup
     };
 
     // const handleInnerClick = (e) => {
@@ -111,8 +113,12 @@ const Login = (props) => {
     // };
 
     return (
-        <div className='Popup-login'>
-            <div onClick={handleOuterClick} className='flex items-center justify-center min-h-[100vh] w-[100vw] z-30'>
+        <div className={`w-full fixed z-50 h-full flex justify-center mt-24 ${!props.isPopupOpen && 'pointer-events-none'}`}>
+            <div onClick={handleOuterClick} className={`fixed bg-gray-700 w-full h-full top-0 z-50 transition-all duration-500  ${props.isPopupOpen ? 'opacity-50' : 'opacity-0 pointer-events-none'}`}>
+            </div>
+
+            <div className={`flex items-center justify-center min-h-[600px] max-w-[900px] w-full z-[60] absolute transition-opacity duration-700 ${props.isPopupOpen ? '' : 'opacity-0 pointer-events-none'}`}>
+
                 <div className='container'>
                     <div className={`form login-form ${loginSlide ? 'active' : ''}`}>
                         <div className={`wrapper`}>
@@ -155,6 +161,7 @@ const Login = (props) => {
                         </div>
                     </div>
                 </div>
+
             </div>
         </div >
     );

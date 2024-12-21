@@ -4,9 +4,9 @@ import Navbar from "../Navbar"
 
 const LayoutUser = () => {
     return (
-        <div className='relative'>
+        <div className='relative w-full'>
             <Navbar />
-            <main>
+            <main className="flex max-w-[1300px] mx-auto mt-10 p-2">
                 <Outlet />
             </main>
         </div>

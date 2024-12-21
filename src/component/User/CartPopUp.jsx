@@ -1,7 +1,8 @@
 import { useEffect } from "react";
 import { addProductCart } from "../../backend/UserApi";
-import usefbStore from "../../store/store";
+
 import { toast } from "react-toastify";
+import usefbStore from "../../Store/store";
 
 const CartPopUp = (props) => {
     const userid = usefbStore((state) => state.usercheck)

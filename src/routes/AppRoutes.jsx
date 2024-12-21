@@ -39,6 +39,9 @@ import EditProduct from '../Page/Admin/EditProduct'
 import ProtectUser from './ProtectUser'
 import LayoutUser from '../component/User/LayoutUser'
 import OrderUser from '../component/User/OrderUser'
+import Cart from '../Page/User/Cart'
+import Payment from '../Page/User/Payment'
+
 
 
 const router = createBrowserRouter([
@@ -46,8 +49,8 @@ const router = createBrowserRouter([
         path: '/',
         element: <Layout />,
         children: [
-            { index: true, element: <Home /> },
-            { path: 'shop', element: <Shop /> }
+            { index: true, element: <Home key="home" /> },
+            { path: 'shop', element: <Shop key="shop" /> }
         ]
     },
     {
@@ -67,7 +70,22 @@ const router = createBrowserRouter([
         children: [
             { index: true, element: <OrderUser /> }
         ]
+    },
+    {
+        path: '/cart',
+        element: <ProtectUser element={<LayoutUser />} />,
+        children: [
+            { index: true, element: <Cart /> }
+        ]
+    },
+    {
+        path: '/payment',
+        element: <ProtectUser element={<LayoutUser />} />,
+        children: [
+            { index: true, element: <Payment /> }
+        ]
     }
+
 
 ], { basename: "/React-Firebase/" })
 

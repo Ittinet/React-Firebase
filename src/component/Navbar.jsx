@@ -20,12 +20,12 @@ const Navbar = () => {
   const stopListening = usefbStore(state => state.stopListening)
   const logout = usefbStore(state => state.logout)
 
-  let popup = null
-  if (isPopupOpen) {
-    popup = <Login isClosePopup={() => { setisPopupOpen(false) }} />
-  } else {
-    popup = null
-  }
+  // let popup = null
+  // if (isPopupOpen) {
+  //   popup = <Login isClosePopup={() => { setisPopupOpen(false) }} isPopupOpen={isPopupOpen} />
+  // } else {
+  //   popup = null
+  // }
 
 
   useEffect(() => {
@@ -166,7 +166,7 @@ const Navbar = () => {
 
         </div>
       </nav >
-      {popup}
+      <Login isClosePopup={() => { setisPopupOpen(false) }} isPopupOpen={isPopupOpen} />
       {/* {isCartOpen && <CartSlide onclose={handleCartClose} isCartOpen={isCartOpen} />} */}
       <CartSlide onclose={handleCartClose} isCartOpen={isCartOpen} />
 

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { ShoppingCart } from 'lucide-react';
+import { Filter, ShoppingCart } from 'lucide-react';
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { filterProduct, getProducts } from "./backend/ProductAPI";
 import { getCategory } from "./backend/CategoryAPI";
@@ -14,6 +14,7 @@ const Shop = () => {
     const [categoryData, setCategoryData] = useState([])
 
     const [isOpenPopUp, setisOpenPopUp] = useState(false)
+    const [isOpenFilter, setisOpenFilter] = useState(true)
     const [productSelectOnCart, setProductSelectOnCart] = useState(null)
 
     const [genders, setGenders] = useState([]);
@@ -22,6 +23,13 @@ const Shop = () => {
     const [searchcategories, setSearchCategories] = useState('')
     const [searchColor, setSearchColor] = useState([])
     const [price, setPrice] = useState([0, 5000])
+
+    const handleCloseFilter = () => {
+        setisOpenFilter(false)
+    }
+    const handleOpenFilter = () => {
+        setisOpenFilter(!isOpenFilter)
+    }
 
 
     const handleFavorite = () => {
@@ -136,7 +144,8 @@ const Shop = () => {
                 <div className="text-center mb-5">
                     <h1 className="text-3xl font-bold">Menu</h1>
                 </div>
-                <div className="flex justify-center gap-16 mb-5">
+                <div className="relative flex justify-center gap-16 mb-5">
+                    <button onClick={handleOpenFilter} className="absolute left-[280px] border border-gray-300 rounded-lg w-8 h-8"><Filter className="mx-auto text-gray-500" size={20} /></button>
                     <div>
                         <span className={`cursor-pointer ${searchcategories === 'all' ? 'bg-red-300' : ''}`} onClick={handleCheckCategory} data-value="all">All</span>
                     </div>
@@ -196,85 +205,94 @@ const Shop = () => {
 
                 </div>
 
-                <div className="absolute border border-gray-200 bg-white w-[250px] left-0 top-[102px] rounded-lg py-4 px-2.5 shadow drop-shadow-md">
-                    <div className="mb-6">
-                        <div className="mb-5">
-                            <label htmlFor="searchtext">Search:</label>
-                            <input onChange={handleCheckWord} type="text" id="searchtext" className="bg-gray-200 w-full rounded-md border border-gray-300 px-2 text-md" placeholder="Search...." />
+                <div className={`sticky border border-gray-200 bg-white w-[250px] h-[100vh] left-0 bottom-0 rounded-lg py-4 px-2.5 shadow drop-shadow-md 
+                ${isOpenFilter ? 'translate-x-0' : '-translate-x-full'}`}>
+                    <div className="relative">
+                        <div className="flex item-center justify-center p-2 absolute right-[-8px] top-[-20px]">
+                            <button onClick={handleCloseFilter} className="text-bold text-xl">x</button>
                         </div>
 
-                        <p className="font-bold">Sex :</p>
-                        <div className="flex gap-1 mt-2 flex-col">
-                            <div className="flex gap-3 items-center">
-                                <input value='male' onChange={handleCheckGender} type="checkbox" id="male" />
-                                <label htmlFor="male" >Male</label>
-                            </div>
-                            <div className="flex gap-3 items-center">
-                                <input value='female' onChange={handleCheckGender} type="checkbox" id="female" />
-                                <label htmlFor="female">Female</label>
-                            </div>
-                            <div className="flex gap-3 items-center">
-                                <input value='both' onChange={handleCheckGender} type="checkbox" id="both" />
-                                <label htmlFor="both">Both</label>
+                        <div className="mb-10">
+                            <div className="mb-5">
+                                <label htmlFor="searchtext">Search:</label>
+                                <input onChange={handleCheckWord} type="text" id="searchtext" className="bg-gray-200 w-full rounded-md border border-gray-300 px-2 text-md" placeholder="Search...." />
                             </div>
 
+                            <p className="font-bold">Sex :</p>
+                            <div className="flex gap-1 mt-2 flex-col">
+                                <div className="flex gap-3 items-center">
+                                    <input value='male' onChange={handleCheckGender} type="checkbox" id="male" />
+                                    <label htmlFor="male" >Male</label>
+                                </div>
+                                <div className="flex gap-3 items-center">
+                                    <input value='female' onChange={handleCheckGender} type="checkbox" id="female" />
+                                    <label htmlFor="female">Female</label>
+                                </div>
+                                <div className="flex gap-3 items-center">
+                                    <input value='both' onChange={handleCheckGender} type="checkbox" id="both" />
+                                    <label htmlFor="both">Both</label>
+                                </div>
+
+                            </div>
                         </div>
-                    </div>
-                    <div className="">
-                        <span className="mb-2 font-bold">Size :</span>
-                        <div className="flex gap-3">
-                            <input onChange={handleCheckSize} type="checkbox" id="s" value='s' />
-                            <label htmlFor="s">S</label>
-                        </div>
-                        <div className="flex gap-3">
-                            <input onChange={handleCheckSize} type="checkbox" id="m" value='m' />
-                            <label htmlFor="m">M</label>
-                        </div>
-                        <div className="flex gap-3">
-                            <input onChange={handleCheckSize} type="checkbox" id="l" value='l' />
-                            <label htmlFor="l">L</label>
-                        </div>
-                        <div className="flex gap-3">
-                            <input onChange={handleCheckSize} type="checkbox" id="xl" value='xl' />
-                            <label htmlFor="xl">XL</label>
-                        </div>
-                    </div>
-                    <div className="mt-6">
-                        <p className="mb-2 font-bold">Color :</p>
                         <div className="">
-                            <div className="flex gap-3 flex-wrap">
-                                <div className={`flex items-center gap-2 p-0.5 border rounded-full ${searchColor.includes('yellow') ? 'border-black' : 'border-white'}`}><button onClick={handleCheckColor} data-color='yellow' className={`bg-yellow-300 border w-7 h-7 rounded-full`}></button></div>
-                                <div className={`flex items-center gap-2 p-0.5 border rounded-full ${searchColor.includes('orange') ? 'border-black' : 'border-white'}`}><button onClick={handleCheckColor} data-color='orange' className={`bg-orange-400 border w-7 h-7 rounded-full`}></button></div>
-                                <div className={`flex items-center gap-2 p-0.5 border rounded-full ${searchColor.includes('red') ? 'border-black' : 'border-white'}`}><button onClick={handleCheckColor} data-color='red' className={`bg-red-500 border w-7 h-7 rounded-full`}></button></div>
-                                <div className={`flex items-center gap-2 p-0.5 border rounded-full ${searchColor.includes('black') ? 'border-black' : 'border-white'}`}><button onClick={handleCheckColor} data-color='black' className={`bg-black border w-7 h-7 rounded-full`}></button></div>
-                                <div className={`flex items-center gap-2 p-0.5 border rounded-full ${searchColor.includes('gray') ? 'border-black' : 'border-white'}`}><button onClick={handleCheckColor} data-color='gray' className={`bg-gray-400 border w-7 h-7 rounded-full`}></button></div>
-                                <div className={`flex items-center gap-2 p-0.5 border rounded-full ${searchColor.includes('white') ? 'border-black' : 'border-white'}`}><button onClick={handleCheckColor} data-color='white' className={`bg-white border w-7 h-7 rounded-full`}></button></div>
-                                <div className={`flex items-center gap-2 p-0.5 border rounded-full ${searchColor.includes('pink') ? 'border-black' : 'border-white'}`}><button onClick={handleCheckColor} data-color='pink' className={`bg-pink-300 border w-7 h-7 rounded-full`}></button></div>
-                                <div className={`flex items-center gap-2 p-0.5 border rounded-full ${searchColor.includes('purple') ? 'border-black' : 'border-white'}`}><button onClick={handleCheckColor} data-color='purple' className={`bg-purple-400 border w-7 h-7 rounded-full`}></button></div>
-                                <div className={`flex items-center gap-2 p-0.5 border rounded-full ${searchColor.includes('blue') ? 'border-black' : 'border-white'}`}><button onClick={handleCheckColor} data-color='blue' className={`bg-blue-400 border w-7 h-7 rounded-full`}></button></div>
-                                <div className={`flex items-center gap-2 p-0.5 border rounded-full ${searchColor.includes('green') ? 'border-black' : 'border-white'}`}><button onClick={handleCheckColor} data-color='green' className={`bg-green-400 border w-7 h-7 rounded-full`}></button></div>
-                                <div className={`flex items-center gap-2 p-0.5 border rounded-full ${searchColor.includes('brown') ? 'border-black' : 'border-white'}`}><button onClick={handleCheckColor} data-color='brown' className={`bg-yellow-700 border w-7 h-7 rounded-full`}></button></div>
-                                <div className={`flex items-center gap-2 p-0.5 border rounded-full ${searchColor.includes('beige') ? 'border-black' : 'border-white'}`}><button onClick={handleCheckColor} data-color='beige' className={`bg-orange-200 border w-7 h-7 rounded-full`}></button></div>
+                            <span className="mb-2 font-bold">Size :</span>
+                            <div className="flex gap-3">
+                                <input onChange={handleCheckSize} type="checkbox" id="s" value='s' />
+                                <label htmlFor="s">S</label>
+                            </div>
+                            <div className="flex gap-3">
+                                <input onChange={handleCheckSize} type="checkbox" id="m" value='m' />
+                                <label htmlFor="m">M</label>
+                            </div>
+                            <div className="flex gap-3">
+                                <input onChange={handleCheckSize} type="checkbox" id="l" value='l' />
+                                <label htmlFor="l">L</label>
+                            </div>
+                            <div className="flex gap-3">
+                                <input onChange={handleCheckSize} type="checkbox" id="xl" value='xl' />
+                                <label htmlFor="xl">XL</label>
                             </div>
                         </div>
-                    </div>
-                    <div className="mt-7">
-                        <h1>ค้นหาราคา</h1>
-                        <div>
-                            <div className="flex justify-between">
-                                <span>Min: {price[0]}</span>
-                                <span>Max: {price[1]}</span>
+                        <div className="mt-10">
+                            <p className="mb-2 font-bold">Color :</p>
+                            <div className="">
+                                <div className="flex gap-3 flex-wrap">
+                                    <div className={`flex items-center gap-2 p-0.5 border rounded-full ${searchColor.includes('yellow') ? 'border-black' : 'border-white'}`}><button onClick={handleCheckColor} data-color='yellow' className={`bg-yellow-300 border w-7 h-7 rounded-full`}></button></div>
+                                    <div className={`flex items-center gap-2 p-0.5 border rounded-full ${searchColor.includes('orange') ? 'border-black' : 'border-white'}`}><button onClick={handleCheckColor} data-color='orange' className={`bg-orange-400 border w-7 h-7 rounded-full`}></button></div>
+                                    <div className={`flex items-center gap-2 p-0.5 border rounded-full ${searchColor.includes('red') ? 'border-black' : 'border-white'}`}><button onClick={handleCheckColor} data-color='red' className={`bg-red-500 border w-7 h-7 rounded-full`}></button></div>
+                                    <div className={`flex items-center gap-2 p-0.5 border rounded-full ${searchColor.includes('black') ? 'border-black' : 'border-white'}`}><button onClick={handleCheckColor} data-color='black' className={`bg-black border w-7 h-7 rounded-full`}></button></div>
+                                    <div className={`flex items-center gap-2 p-0.5 border rounded-full ${searchColor.includes('gray') ? 'border-black' : 'border-white'}`}><button onClick={handleCheckColor} data-color='gray' className={`bg-gray-400 border w-7 h-7 rounded-full`}></button></div>
+                                    <div className={`flex items-center gap-2 p-0.5 border rounded-full ${searchColor.includes('white') ? 'border-black' : 'border-white'}`}><button onClick={handleCheckColor} data-color='white' className={`bg-white border w-7 h-7 rounded-full`}></button></div>
+                                    <div className={`flex items-center gap-2 p-0.5 border rounded-full ${searchColor.includes('pink') ? 'border-black' : 'border-white'}`}><button onClick={handleCheckColor} data-color='pink' className={`bg-pink-300 border w-7 h-7 rounded-full`}></button></div>
+                                    <div className={`flex items-center gap-2 p-0.5 border rounded-full ${searchColor.includes('purple') ? 'border-black' : 'border-white'}`}><button onClick={handleCheckColor} data-color='purple' className={`bg-purple-400 border w-7 h-7 rounded-full`}></button></div>
+                                    <div className={`flex items-center gap-2 p-0.5 border rounded-full ${searchColor.includes('blue') ? 'border-black' : 'border-white'}`}><button onClick={handleCheckColor} data-color='blue' className={`bg-blue-400 border w-7 h-7 rounded-full`}></button></div>
+                                    <div className={`flex items-center gap-2 p-0.5 border rounded-full ${searchColor.includes('green') ? 'border-black' : 'border-white'}`}><button onClick={handleCheckColor} data-color='green' className={`bg-green-400 border w-7 h-7 rounded-full`}></button></div>
+                                    <div className={`flex items-center gap-2 p-0.5 border rounded-full ${searchColor.includes('brown') ? 'border-black' : 'border-white'}`}><button onClick={handleCheckColor} data-color='brown' className={`bg-yellow-700 border w-7 h-7 rounded-full`}></button></div>
+                                    <div className={`flex items-center gap-2 p-0.5 border rounded-full ${searchColor.includes('beige') ? 'border-black' : 'border-white'}`}><button onClick={handleCheckColor} data-color='beige' className={`bg-orange-200 border w-7 h-7 rounded-full`}></button></div>
+                                </div>
                             </div>
-                            <Slider
-                                onChange={handlePrice}
-                                range
-                                min={0}
-                                max={5000}
-                                defaultValue={[0, 5000]}
-                            />
+                        </div>
+                        <div className="mt-16">
+                            <h1>ค้นหาราคา</h1>
+                            <div>
+                                <div className="flex justify-between">
+                                    <span>Min: {price[0]}</span>
+                                    <span>Max: {price[1]}</span>
+                                </div>
+                                <Slider
+                                    onChange={handlePrice}
+                                    range
+                                    min={0}
+                                    max={5000}
+                                    defaultValue={[0, 5000]}
+                                />
+                            </div>
                         </div>
                     </div>
                 </div>
+
+
                 {isOpenPopUp && <CartPopUp onclose={handleClosePopupCart} product={productSelectOnCart} />}
 
             </div>

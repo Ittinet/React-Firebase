@@ -6,6 +6,7 @@ import Navbar from "./component/Navbar"
 import SlideMain from "./component/SlideMain"
 
 const Home = () => {
+    
     return (
         <div>
             <div className="max-w-full m-auto">

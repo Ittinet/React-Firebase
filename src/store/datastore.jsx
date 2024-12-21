@@ -44,7 +44,7 @@ const dataStore = (set, get) => ({
                     console.error("Error fetching cart data:", error)
                 }
             );
-            console.log('getcartuser')
+            // console.log('getcartuser')
 
             return unsubscribe
         } catch (error) {
